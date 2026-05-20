@@ -81,4 +81,4 @@ Ganti password setelah login pertama melalui menu Admin > Change Password.
 
 ## Lisensi
 
-Creative Commons Attribution-NonCommercial (CC BY-NC)
+Creative Commons Attribution-NonCommercial (CC BY-NC).
