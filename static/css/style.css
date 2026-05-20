@@ -231,6 +231,18 @@ body {
     margin-bottom: 0;
 }
 
+.card-table-scroll {
+    overflow: auto;
+    max-height: calc(100vh - var(--header-height) - 200px);
+}
+
+.card-table-scroll thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--green-100);
+}
+
 .card {
     border: none;
     border-radius: .75rem;
