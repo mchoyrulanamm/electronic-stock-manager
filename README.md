@@ -81,4 +81,4 @@ Ganti password setelah login pertama melalui menu Admin > Change Password.
 
 ## Lisensi
 
-MIT
+Creative Commons Attribution-NonCommercial (CC BY-NC)
