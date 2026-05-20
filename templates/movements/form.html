@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}New Stock Movement{% endblock %}
+{% block content %}
+<h4>Record Stock Movement</h4>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Component <span class="text-danger">*</span></label>
+                    <select name="component_id" class="form-select" required>
+                        <option value="">-- Select Component --</option>
+                        {% for c in components %}
+                        <option value="{{ c.id }}" {{ 'selected' if preselected == c.id }}>
+                            {{ c.name }} ({{ c.stock_qty }} {{ c.unit }} in stock)
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Type <span class="text-danger">*</span></label>
+                    <select name="movement_type" class="form-select" required>
+                        <option value="in">Stock In (+)</option>
+                        <option value="out">Stock Out (-)</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Quantity <span class="text-danger">*</span></label>
+                    <input type="number" name="quantity" class="form-control" min="1" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Note</label>
+                    <textarea name="note" class="form-control" rows="2" placeholder="e.g. Bought 50pcs from Tokopedia"></textarea>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{{ url_for('movements.list') }}" class="btn btn-light border">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card green d-flex align-items-center gap-3">
+            <div class="stat-icon">
+                <i class="bi bi-cpu"></i>
+            </div>
+            <div>
+                <div class="stat-number">{{ total_components }}</div>
+                <div class="stat-label">Components</div>
+                <a href="{{ url_for('components.list') }}" class="small fw-semibold" style="color:var(--green-700)">View all &rarr;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card teal d-flex align-items-center gap-3">
+            <div class="stat-icon">
+                <i class="bi bi-tags"></i>
+            </div>
+            <div>
+                <div class="stat-number">{{ total_categories }}</div>
+                <div class="stat-label">Categories</div>
+                <a href="{{ url_for('categories.list') }}" class="small fw-semibold" style="color:#00695c">View all &rarr;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card blue d-flex align-items-center gap-3">
+            <div class="stat-icon">
+                <i class="bi bi-people"></i>
+            </div>
+            <div>
+                <div class="stat-number">{{ total_vendors }}</div>
+                <div class="stat-label">Vendors</div>
+                <a href="{{ url_for('vendors.list') }}" class="small fw-semibold" style="color:#0d47a1">View all &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-exclamation-triangle me-1"></i>Low Stock Alert</span>
+                <a href="{{ url_for('components.list', low_stock='1') }}" class="btn btn-sm btn-outline-danger">View all</a>
+            </div>
+            <div class="card-body p-0">
+                {% if low_stock %}
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Stock</th>
+                                <th>Min</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in low_stock[:5] %}
+                            <tr class="table-danger">
+                                <td><a href="{{ url_for('components.edit', id=c.id) }}">{{ c.name }}</a></td>
+                                <td>{{ c.stock_qty }} {{ c.unit }}</td>
+                                <td>{{ c.min_stock }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">All components are well-stocked.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-arrow-left-right me-1"></i>Recent Movements</div>
+            <div class="card-body p-0">
+                {% if recent_movements %}
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Qty</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in recent_movements %}
+                            <tr>
+                                <td>{{ m.component.name }}</td>
+                                <td class="{% if m.quantity_change > 0 %}text-success{% else %}text-danger{% endif %} fw-bold">
+                                    {{ '+' if m.quantity_change > 0 }}{{ m.quantity_change }}
+                                </td>
+                                <td><span class="badge bg-{{ 'success' if m.movement_type == 'in' else 'warning' }}">{{ m.movement_type }}</span></td>
+                                <td>{{ m.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No movements recorded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Components{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h4>Components</h4>
+    <a href="{{ url_for('components.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> New Component
+    </a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-medium text-muted">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Name, stock code, value..." value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-medium text-muted">Category</label>
+                <select name="category_id" class="form-select">
+                    <option value="">All Categories</option>
+                    {% for c in categories %}
+                    <option value="{{ c.id }}" {{ 'selected' if selected_category|string == c.id|string }}>{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="form-check mt-3 pt-1">
+                    <input type="checkbox" name="low_stock" value="1" class="form-check-input" id="lowStock"
+                           {{ 'checked' if low_stock_only }}>
+                    <label class="form-check-label" for="lowStock">Low Stock Only</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Package</th>
+                        <th>Stock Code</th>
+                        <th>Stock</th>
+                        <th>Buy Price</th>
+                        <th>Sell Price</th>
+                        <th>Category</th>
+                        <th>Vendor</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in components %}
+                    <tr class="{% if c.stock_qty < c.min_stock %}table-danger{% elif c.stock_qty == c.min_stock %}table-warning{% endif %}">
+                        <td class="fw-medium">{{ c.name }}</td>
+                        <td>{{ c.package or '-' }}</td>
+                        <td>{{ c.stock_code or '-' }}</td>
+                        <td>
+                            {{ c.stock_qty }} {{ c.unit }}
+                            {% if c.stock_qty < c.min_stock %}
+                                <span class="badge bg-danger ms-1">Low</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ 'Rp {:,.0f}'.format(c.purchase_price) if c.purchase_price else '-' }}</td>
+                        <td>{{ 'Rp {:,.0f}'.format(c.selling_price) if c.selling_price else '-' }}</td>
+                        <td>{{ c.category.name if c.category else '-' }}</td>
+                        <td>{{ c.vendor.name if c.vendor else '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('components.edit', id=c.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <form action="{{ url_for('components.delete', id=c.id) }}" method="POST" class="d-inline"
+                                  onsubmit="return confirm('Delete this component?');">
+                                <button class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9" class="text-muted text-center py-4">No components found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
