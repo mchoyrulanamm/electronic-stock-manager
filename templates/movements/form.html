@@ -3,36 +3,30 @@
 {% block content %}
 <h4>Record Stock Movement</h4>
 
-<div class="card">
+<div class="card" style="max-width: 600px">
     <div class="card-body">
         <form method="POST">
-            <div class="row g-3">
+            <div class="mb-3">
+                <label class="form-label">Stock Code <span class="text-danger">*</span></label>
+                <input type="text" name="stock_code" class="form-control" placeholder="e.g. R-001" required value="{{ stock_code or '' }}">
+                <div class="form-text">Enter the component's stock code.</div>
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">Component <span class="text-danger">*</span></label>
-                    <select name="component_id" class="form-select" required>
-                        <option value="">-- Select Component --</option>
-                        {% for c in components %}
-                        <option value="{{ c.id }}" {{ 'selected' if preselected == c.id }}>
-                            {{ c.name }} ({{ c.stock_qty }} {{ c.unit }} in stock)
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
                     <label class="form-label">Type <span class="text-danger">*</span></label>
                     <select name="movement_type" class="form-select" required>
-                        <option value="in">Stock In (+)</option>
-                        <option value="out">Stock Out (-)</option>
+                        <option value="in" {{ 'selected' if movement_type == 'in' }}>Stock In (+)</option>
+                        <option value="out" {{ 'selected' if movement_type == 'out' }}>Stock Out (-)</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label class="form-label">Quantity <span class="text-danger">*</span></label>
-                    <input type="number" name="quantity" class="form-control" min="1" required>
+                    <input type="number" name="quantity" class="form-control" min="1" required value="{{ quantity or '' }}">
                 </div>
-                <div class="col-12">
-                    <label class="form-label">Note</label>
-                    <textarea name="note" class="form-control" rows="2" placeholder="e.g. Bought 50pcs from Tokopedia"></textarea>
-                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Note</label>
+                <textarea name="note" class="form-control" rows="2" placeholder="e.g. Bought 50pcs from Tokopedia">{{ note or '' }}</textarea>
             </div>
             <div class="mt-4">
                 <button type="submit" class="btn btn-primary">Save</button>

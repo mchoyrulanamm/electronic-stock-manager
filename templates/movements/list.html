@@ -11,17 +11,24 @@
 <div class="card mb-3">
     <div class="card-body">
         <form method="GET" class="row g-2 align-items-end">
-            <div class="col-md-4">
-                <label class="form-label small fw-medium text-muted">Component</label>
-                <select name="component_id" class="form-select">
-                    <option value="">All Components</option>
-                    {% for c in components %}
-                    <option value="{{ c.id }}" {{ 'selected' if selected_component|string == c.id|string }}>{{ c.name }}</option>
-                    {% endfor %}
-                </select>
+            <div class="col-md-3">
+                <label class="form-label small fw-medium text-muted">Date From</label>
+                <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-medium text-muted">Date To</label>
+                <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
+            </div>
+            <div class="col-md-2">
+                <a href="{{ url_for('movements.export', date_from=date_from, date_to=date_to) }}" class="btn btn-success w-100">
+                    <i class="bi bi-filetype-pdf"></i> Export PDF
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a href="{{ url_for('movements.list') }}" class="btn btn-light border w-100">Reset</a>
             </div>
         </form>
     </div>
@@ -34,6 +41,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Component</th>
+                    <th>Stock Code</th>
                     <th>Type</th>
                     <th>Quantity</th>
                     <th>Note</th>
@@ -42,8 +50,9 @@
             <tbody>
                 {% for m in movements %}
                 <tr>
-                    <td class="text-muted">{{ m.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="text-muted">{{ m.created_at.strftime('%Y-%m-%d') }}</td>
                     <td class="fw-medium">{{ m.component.name }}</td>
+                    <td>{{ m.component.stock_code or '-' }}</td>
                     <td><span class="badge bg-{{ 'success' if m.movement_type == 'in' else 'warning' }}">{{ m.movement_type }}</span></td>
                     <td class="{% if m.quantity_change > 0 %}text-success{% else %}text-danger{% endif %} fw-bold">
                         {{ '+' if m.quantity_change > 0 }}{{ m.quantity_change }}
@@ -52,7 +61,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="5" class="text-muted text-center py-4">No movements recorded yet.</td>
+                    <td colspan="6" class="text-muted text-center py-4">No movements recorded yet.</td>
                 </tr>
                 {% endfor %}
             </tbody>
