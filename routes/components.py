@@ -19,6 +19,7 @@ def list():
             db.or_(
                 Component.name.ilike(f'%{search}%'),
                 Component.stock_code.ilike(f'%{search}%'),
+                Component.vcode.ilike(f'%{search}%'),
                 Component.value.ilike(f'%{search}%'),
                 Vendor.name.ilike(f'%{search}%'),
             )
@@ -47,6 +48,7 @@ def create():
         component = Component(
             name=request.form['name'],
             stock_code=request.form.get('stock_code'),
+            vcode=request.form.get('vcode'),
             description=request.form.get('description'),
             value=request.form.get('value'),
             package=request.form.get('package'),
@@ -78,6 +80,7 @@ def edit(id):
     if request.method == 'POST':
         component.name = request.form['name']
         component.stock_code = request.form.get('stock_code')
+        component.vcode = request.form.get('vcode')
         component.description = request.form.get('description')
         component.value = request.form.get('value')
         component.package = request.form.get('package')
