@@ -75,7 +75,8 @@ class Component(db.Model):
                            onupdate=lambda: datetime.now(timezone.utc))
 
     movements = db.relationship('StockMovement', backref='component', lazy=True,
-                                order_by='StockMovement.created_at.desc()')
+                                 order_by='StockMovement.created_at.desc()',
+                                 cascade='all, delete, delete-orphan')
 
     def __repr__(self):
         return f'<Component {self.name}>'

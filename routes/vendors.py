@@ -52,6 +52,8 @@ def edit(id):
 @login_required
 def delete(id):
     vendor = Vendor.query.get_or_404(id)
+    for c in vendor.components:
+        c.vendor_id = None
     db.session.delete(vendor)
     db.session.commit()
     flash('Vendor deleted successfully', 'success')

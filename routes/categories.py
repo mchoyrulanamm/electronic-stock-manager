@@ -44,6 +44,8 @@ def edit(id):
 @login_required
 def delete(id):
     category = Category.query.get_or_404(id)
+    for c in category.components:
+        c.category_id = None
     db.session.delete(category)
     db.session.commit()
     flash('Category deleted successfully', 'success')

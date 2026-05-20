@@ -95,7 +95,7 @@
                                     {{ '+' if m.quantity_change > 0 }}{{ m.quantity_change }}
                                 </td>
                                 <td><span class="badge bg-{{ 'success' if m.movement_type == 'in' else 'warning' }}">{{ m.movement_type }}</span></td>
-                                <td>{{ m.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>{{ m.created_at.strftime('%Y-%m-%d') }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
