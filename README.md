@@ -4,7 +4,7 @@ Aplikasi manajemen stok komponen elektronik berbasis web. Dirancang untuk engine
 
 ## Fitur
 
-- **Dashboard** — Statistik jumlah komponen, kategori, vendor, dan low stock alert
+- **Dashboard** — Stat cards (total komponen, kategori, vendor), low stock alert, dan 10 movement terbaru
 - **Components** — CRUD komponen dengan search by name, stock code, vcode, value, vendor
 - **Categories** — Kelola kategori komponen
 - **Vendors** — Kelola vendor/supplier komponen
@@ -12,7 +12,8 @@ Aplikasi manajemen stok komponen elektronik berbasis web. Dirancang untuk engine
 - **Export PDF** — Export laporan stock movement dengan filter tanggal
 - **Low Stock Alert** — Tanda merah (stok < min) dan kuning (stok = min)
 - **Autentikasi** — Login required + change password
-- **Responsive** — Bootstrap 5, mobile friendly, sidebar collapse
+- **Responsive** — Bootstrap 5 + Bootstrap Icons, mobile friendly, sidebar collapse
+- **Global Search** — Quick search komponen dari header
 
 ## Tech Stack
 
@@ -21,9 +22,16 @@ Aplikasi manajemen stok komponen elektronik berbasis web. Dirancang untuk engine
 | Backend | Flask (Python) |
 | Database | SQLite via Flask-SQLAlchemy |
 | ORM | SQLAlchemy |
-| Frontend | Bootstrap 5 CDN, Jinja2, vanilla JS |
+| Frontend | Bootstrap 5 CDN + Bootstrap Icons, Jinja2, vanilla JS |
 | Production | Gunicorn |
 | PDF Export | fpdf2 |
+
+## Environment Variables
+
+| Variable | Default | Keterangan |
+|---|---|---|
+| `SECRET_KEY` | `dev-secret-key` | Flask session secret key |
+| `DATABASE_URL` | `sqlite:///instance/inventory.db` | Database URI |
 
 ## Cara Install & Jalankan
 
@@ -55,9 +63,10 @@ Ganti password setelah login pertama melalui menu Admin > Change Password.
 
 ```
 ├── app.py                  # Entry point Flask
-├── config.py               # Konfigurasi DB
-├── models.py               # Model SQLAlchemy
-├── requirements.txt        # Dependencies
+├── config.py               # Konfigurasi DB & SECRET_KEY
+├── models.py               # Model SQLAlchemy (5 tabel)
+├── requirements.txt        # Dependencies Python
+├── .gitignore
 ├── routes/
 │   ├── __init__.py         # Decorator login_required
 │   ├── auth.py             # Login / logout / change password
@@ -66,15 +75,28 @@ Ganti password setelah login pertama melalui menu Admin > Change Password.
 │   ├── vendors.py          # CRUD vendor
 │   └── movements.py        # Stock movement + export PDF
 ├── templates/
-│   ├── base.html           # Layout sidebar + header
+│   ├── base.html           # Layout sidebar + header + global search
 │   ├── index.html          # Dashboard
 │   ├── auth/
+│   │   ├── login.html
+│   │   └── change_password.html
 │   ├── components/
+│   │   ├── list.html
+│   │   └── form.html
 │   ├── categories/
+│   │   ├── list.html
+│   │   └── form.html
 │   ├── vendors/
-│   └── movements/
+│   │   ├── list.html
+│   │   └── form.html
+│   ├── movements/
+│   │   ├── list.html
+│   │   └── form.html
+│   └── partials/          # Partial templates
 ├── static/
-│   └── css/style.css
+│   ├── css/
+│   │   └── style.css       # Green theme custom CSS
+│   └── js/                 # Custom JavaScript
 └── instance/
     └── inventory.db        # Auto-generated SQLite DB
 ```
